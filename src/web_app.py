@@ -17,6 +17,7 @@ from pydantic import BaseModel
 
 from .predict_recommendation import HybridPredictor
 from .recommendation_engine import recommend
+from .outcome_analytics import build_outcome_analytics
 
 
 PROJECT = Path(__file__).resolve().parents[1]
@@ -139,10 +140,7 @@ def cases(
 
 @app.get("/api/real-cases")
 def real_cases() -> dict:
-    if not REAL_CASES.exists():
-        return {"items": [], "count": 0}
-    with REAL_CASES.open(encoding="utf-8") as file:
-        rows = list(csv.DictReader(file))
+    rows = load_real_cases()
     result = [{
         "case_id": row["case_id"],
         "customer_segment": row["customer_segment"],
@@ -155,6 +153,13 @@ def real_cases() -> dict:
         "recommended_action": row["recommended_action"],
     } for row in rows]
     return {"items": result, "count": len(result)}
+
+
+def load_real_cases() -> list[dict[str, str]]:
+    if not REAL_CASES.exists():
+        return []
+    with REAL_CASES.open(encoding="utf-8") as file:
+        return list(csv.DictReader(file))
 
 
 def load_real_case(case_id: str) -> dict[str, str] | None:
@@ -206,6 +211,11 @@ def store_intervention(case_id: str, payload: InterventionInput) -> dict[str, An
 def interventions(case_id: str | None = None) -> dict:
     items = load_interventions(case_id)
     return {"items": items, "count": len(items)}
+
+
+@app.get("/api/outcome-analytics")
+def outcome_analytics() -> dict[str, Any]:
+    return build_outcome_analytics(load_interventions(), load_real_cases())
 
 
 @app.post("/api/real-cases/{case_id}/interventions", status_code=201)
@@ -335,7 +345,8 @@ DASHBOARD_HTML = """<!doctype html>
   </style>
 </head>
 <body>
-<header><h1>Shopify Checkout AI</h1><p>Рекомендации по брошенным корзинам и checkout’ам</p></header>
+<header><h1>Shopify Checkout AI</h1><p>Рекомендации по брошенным корзинам и checkout’ам</p>
+  <p id="analytics">Загружаю статистику recovery…</p></header>
 <main>
   <section class="panel list"><div id="cases" class="empty">Загружаю случаи…</div></section>
   <section class="panel detail" id="detail"><div class="empty">Выберите checkout слева.</div></section>
@@ -348,6 +359,13 @@ async function loadCases(){
     <strong>${esc(x.case_id)}</strong><small>${esc(x.customer_segment)} · ${esc(x.last_funnel_stage)} · $${x.subtotal_price.toFixed(2)}</small></button>`).join('');
   document.querySelectorAll('.case').forEach(b=>b.onclick=()=>showCase(b));
   if(data.items.length) document.querySelector('.case').click();
+}
+async function loadAnalytics(){
+  const x=await fetch('/api/outcome-analytics').then(r=>r.json());
+  const rate=x.summary.recovery_rate===null?'нет завершённых наблюдений':
+    `recovery rate ${(x.summary.recovery_rate*100).toFixed(1)}%`;
+  document.querySelector('#analytics').textContent=
+    `Воздействий: ${x.summary.total_interventions} · восстановлено: ${x.summary.recovered} · ожидают: ${x.summary.pending} · ${rate}`;
 }
 async function showCase(button){
   document.querySelectorAll('.case').forEach(b=>b.classList.remove('active')); button.classList.add('active');
@@ -392,5 +410,6 @@ async function saveResult(interventionId,result){
   document.querySelector('#saved').textContent=response.ok?'Результат сохранён в обучающую историю.':'Не удалось сохранить.';
 }
 loadCases().catch(()=>document.querySelector('#cases').textContent='Не удалось загрузить данные.');
+loadAnalytics().catch(()=>document.querySelector('#analytics').textContent='Статистика recovery недоступна.');
 </script>
 </body></html>"""
