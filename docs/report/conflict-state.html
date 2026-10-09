@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="uk"><meta charset="utf-8"><title>Git merge conflict evidence</title>
+<style>body{margin:0;background:#0d1117;color:#e6edf3;font:21px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace}main{max-width:1180px;margin:50px auto;padding:34px;border:1px solid #30363d;border-radius:14px;background:#161b22}h1{font:700 30px system-ui;color:#58a6ff}.green{color:#3fb950}.red{color:#f85149}.yellow{color:#d29922}pre{white-space:pre-wrap}</style>
+<main><h1>Git merge conflict — README.md</h1><pre><span class="green">$ git merge main</span>
+Auto-merging README.md
+<span class="red">CONFLICT (content): Merge conflict in README.md</span>
+Automatic merge failed; fix conflicts and then commit the result.
+
+<span class="green">$ git status --short --branch</span>
+## feature/document-project-purpose
+<span class="red">UU README.md</span>
+
+<span class="yellow">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span>
+Проект анализирует брошенные корзины и checkout'ы Shopify, чтобы оценивать
+эффективность действий администратора по восстановлению заказов.
+<span class="yellow">=======</span>
+Система объединяет события Shopify Web Pixel и Admin API, чтобы находить
+причины незавершённых checkout'ов и предлагать администратору следующие действия.
+<span class="yellow">&gt;&gt;&gt;&gt;&gt;&gt;&gt; main</span></pre></main></html>
