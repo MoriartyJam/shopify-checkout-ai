@@ -1,0 +1,42 @@
+query CompletedCheckoutOrders($first: Int!, $after: String, $query: String) {
+  orders(
+    first: $first
+    after: $after
+    query: $query
+    sortKey: CREATED_AT
+    reverse: true
+  ) {
+    nodes {
+      id
+      checkoutToken
+      createdAt
+      customer {
+        id
+        numberOfOrders
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+
+query OpenAbandonedCheckouts($first: Int!, $after: String, $query: String) {
+  abandonedCheckouts(first: $first, after: $after, query: $query) {
+    nodes {
+      id
+      abandonedCheckoutUrl
+      createdAt
+      updatedAt
+      customer {
+        id
+        numberOfOrders
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

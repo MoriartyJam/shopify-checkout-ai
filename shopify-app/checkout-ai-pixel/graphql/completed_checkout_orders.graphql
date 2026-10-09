@@ -1,0 +1,23 @@
+query CompletedCheckoutOrders($first: Int!, $after: String, $query: String) {
+  orders(
+    first: $first
+    after: $after
+    query: $query
+    sortKey: CREATED_AT
+    reverse: true
+  ) {
+    nodes {
+      id
+      checkoutToken
+      createdAt
+      customer {
+        id
+        numberOfOrders
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Runtime and customer data (may contain personal information)
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Generated ML artifacts
+models/*.keras
+models/*.h5
+models/evaluation.json
+
+# JavaScript / Shopify CLI
+node_modules/
+dist/
+.shopify/
+.shopify.lock
+.agents/
+*.log
+
+# Editors and operating systems
+.DS_Store
+.idea/
+.vscode/
+*.swp

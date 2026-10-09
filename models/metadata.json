@@ -1,0 +1,100 @@
+{
+  "numeric": [
+    "cart_viewed",
+    "checkout_started",
+    "contact_submitted",
+    "address_submitted",
+    "shipping_submitted",
+    "payment_submitted",
+    "checkout_completed",
+    "line_items_count",
+    "items_quantity",
+    "subtotal_price",
+    "total_price",
+    "discount_amount",
+    "duties_amount",
+    "shipping_price",
+    "shipping_ratio",
+    "extra_cost_ratio",
+    "previous_orders",
+    "is_first_time_customer",
+    "customer_amount_spent",
+    "previous_abandonments",
+    "recovery_emails_sent",
+    "previous_reminder_recoveries",
+    "inventory_available",
+    "payment_error",
+    "discount_error",
+    "delivery_error",
+    "inventory_error"
+  ],
+  "categorical": {
+    "last_funnel_stage": [
+      "cart_viewed",
+      "checkout_address_info_submitted",
+      "checkout_completed",
+      "checkout_contact_info_submitted",
+      "checkout_shipping_info_submitted",
+      "checkout_started",
+      "payment_info_submitted"
+    ],
+    "country_code": [
+      "CA",
+      "DE",
+      "FR",
+      "GB",
+      "PL",
+      "UA",
+      "US"
+    ],
+    "device_type": [
+      "desktop",
+      "mobile",
+      "tablet"
+    ],
+    "traffic_source": [
+      "direct",
+      "email",
+      "organic",
+      "paid_search",
+      "paid_social",
+      "referral"
+    ]
+  },
+  "labels": [
+    "cart_not_checkout",
+    "completed",
+    "discount_error",
+    "drop_after_address",
+    "drop_after_checkout_start",
+    "drop_after_contact",
+    "drop_after_shipping",
+    "high_cart_value",
+    "high_extra_costs",
+    "high_shipping_ratio",
+    "inventory_error",
+    "message_non_responder",
+    "payment_error",
+    "reminder_responsive",
+    "repeated_abandonment"
+  ],
+  "pattern_actions": {
+    "cart_not_checkout": "REVIEW_CART_VALUE",
+    "drop_after_checkout_start": "REVIEW_CHECKOUT_ENTRY",
+    "drop_after_contact": "SEND_CHECKOUT_REMINDER",
+    "drop_after_address": "CHECK_DELIVERY_SETTINGS",
+    "drop_after_shipping": "SEND_CHECKOUT_REMINDER",
+    "high_shipping_ratio": "OFFER_FREE_SHIPPING",
+    "high_extra_costs": "REVIEW_EXTRA_COSTS",
+    "payment_error": "SUGGEST_ALTERNATIVE_PAYMENT",
+    "discount_error": "CHECK_DISCOUNT_CODE",
+    "inventory_error": "CHECK_PRODUCT_STOCK",
+    "high_cart_value": "OFFER_PERSONAL_HELP",
+    "repeated_abandonment": "AVOID_AUTOMATIC_DISCOUNT",
+    "reminder_responsive": "SEND_CHECKOUT_REMINDER",
+    "message_non_responder": "STOP_MESSAGES",
+    "completed": "NO_ACTION"
+  },
+  "tensorflow_version": "2.16.2",
+  "seed": 42
+}
